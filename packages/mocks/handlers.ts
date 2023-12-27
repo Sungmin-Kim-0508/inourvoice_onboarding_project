@@ -1,6 +1,6 @@
-import { HttpResponse, http } from "msw";
+import { HttpHandler, HttpResponse, http } from "msw";
 
-export const handlers = [
+export const handlers: HttpHandler[] = [
   http.get("/posts", () => {
     console.log('Captured a "GET /posts" request');
   }),

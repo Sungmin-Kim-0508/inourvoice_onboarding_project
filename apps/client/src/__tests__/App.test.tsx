@@ -10,8 +10,8 @@ describe("Card", () => {
     const CARD = "카드";
 
     render(<Card title={CARD} children={undefined} href={""} />);
-    const cardTitle = screen.queryAllByRole("heading");
-    expect(cardTitle).toBeInTheDocument();
+    const cardTitle = screen.queryByRole("heading");
+
     expect(cardTitle).toHaveTextContent(CARD);
   });
 });
