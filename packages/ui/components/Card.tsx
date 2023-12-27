@@ -16,12 +16,10 @@ export function Card({
       rel="noopener noreferrer"
       target="_blank"
     >
-      <h2 className="ui-mb-3 ui-text-2xl ui-font-semibold">
-        {title}{" "}
-        <span className="ui-inline-block ui-transition-transform group-hover:ui-translate-x-1 motion-reduce:ui-transform-none">
-          Card -&gt;
-        </span>
-      </h2>
+      <h2 className="ui-mb-3 ui-text-2xl ui-font-semibold">{title}</h2>
+      <span className="ui-inline-block ui-transition-transform group-hover:ui-translate-x-1 motion-reduce:ui-transform-none">
+        Card -&gt;
+      </span>
       <p className="ui-m-0 ui-max-w-[30ch] ui-text-sm ui-opacity-50">
         {children}
       </p>
