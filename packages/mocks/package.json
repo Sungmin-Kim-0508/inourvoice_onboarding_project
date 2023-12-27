@@ -1,0 +1,16 @@
+{
+  "name": "@repo/mock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "browser.ts",
+  "types": "browser.ts",
+  "scripts": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "msw": "^2.0.11"
+  }
+}

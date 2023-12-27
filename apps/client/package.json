@@ -19,6 +19,10 @@
     "@repo/mock": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "@repo/playwright-config": "workspace:*",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -30,7 +34,8 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "tailwind-styled-components": "^2.2.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^1.1.0"
   },
   "msw": {
     "workerDirectory": "public"

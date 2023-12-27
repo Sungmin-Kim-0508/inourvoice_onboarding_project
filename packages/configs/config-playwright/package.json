@@ -1,0 +1,13 @@
+{
+  "name": "@repo/playwright-config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "ISC",
+  "main": "index.js",
+  "files": [
+    "playwright.config.ts"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.36.2"
+  }
+}
