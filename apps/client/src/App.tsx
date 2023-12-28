@@ -2,7 +2,7 @@ import React from "react";
 
 function App() {
   return (
-    <main className="w-full bg-zinc-900 flex">
+    <main className="w-full flex">
       <aside className="min-h-screen max-w-[260px] min-w-[260px] h-full">
         {/* Sidebar */}
       </aside>
