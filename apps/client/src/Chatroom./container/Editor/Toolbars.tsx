@@ -31,23 +31,29 @@ export function Toolbars({ isFocused }: Props) {
    */
   const updateToolbar = () => {
     const selection = $getSelection();
-    if ($isRangeSelection(selection)) {
-      const anchorNode = selection.anchor.getNode();
-      const element =
-        anchorNode.getKey() === "root"
-          ? anchorNode
-          : anchorNode.getTopLevelElementOrThrow();
-      const elementKey = element.getKey();
-      const elementDOM = editor.getElementByKey(elementKey);
-      if (elementDOM !== null) {
-        if ($isListNode(element)) {
-          const parentList = $getNearestNodeOfType(anchorNode, ListNode);
-          const type = parentList ? parentList.getTag() : element.getTag();
-          setBlockType(type);
-        } else {
-          setBlockType("paragraph");
-        }
-      }
+
+    if (!$isRangeSelection(selection)) {
+      return;
+    }
+
+    const anchorNode = selection.anchor.getNode();
+    const element =
+      anchorNode.getKey() === "root"
+        ? anchorNode
+        : anchorNode.getTopLevelElementOrThrow();
+    const elementKey = element.getKey();
+    const elementDOM = editor.getElementByKey(elementKey);
+
+    if (elementDOM === null) {
+      return;
+    }
+
+    if ($isListNode(element)) {
+      const parentList = $getNearestNodeOfType(anchorNode, ListNode);
+      const type = parentList ? parentList.getTag() : element.getTag();
+      setBlockType(type);
+    } else {
+      setBlockType("paragraph");
     }
   };
 
