@@ -9,4 +9,14 @@
     font-family: "Pretendard";
     background-color: #18181b; /* zinc-900 */
   }
+  /* Message style overriding */
+  .message-underline {
+    text-decoration: underline;
+  }
+  .message-ul {
+    list-style-type: disc;
+  }
+  .message-li {
+    margin-left: 15px;
+  }
 }
