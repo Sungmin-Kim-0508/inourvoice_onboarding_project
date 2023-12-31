@@ -6,15 +6,17 @@ import {
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
-import { SericalizePlugin } from "./SericalizePlugin";
-import { Toolbars } from "./Toolbars";
+import { SericalizePlugin } from "./plugins/SericalizePlugin";
+import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
   onError: (error: Error) => console.log(error),
   theme: {
+    // 에디터 내의 각 태그에 대한 클래스명을 부여하는 객체입니다.
     text: {
       bold: "message-bold",
       italic: "message-italic",
@@ -23,6 +25,9 @@ const initialConfig: InitialConfigType = {
     list: {
       ul: "message-ul",
       listitem: "message-li",
+      nested: {
+        listitem: "message-nested-prev-li",
+      },
     },
   },
   nodes: [ListNode, ListItemNode],
@@ -58,7 +63,7 @@ export function Editor() {
         }`}
       >
         <LexicalComposer initialConfig={initialConfig}>
-          <Toolbars isFocused={isFocused} />
+          <ToolbarPlugin isFocused={isFocused} />
           <RichTextPlugin
             contentEditable={
               <ContentEditable
@@ -85,6 +90,7 @@ export function Editor() {
           </div>
           <SericalizePlugin onChange={handleChange} />
           <HistoryPlugin />
+          <TabIndentationPlugin />
         </LexicalComposer>
       </div>
     </section>
