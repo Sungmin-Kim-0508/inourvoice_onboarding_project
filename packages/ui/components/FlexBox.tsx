@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 
-interface FlexProps {
+interface FlexBoxProps {
   flex_direction?:
     | "flex-row"
     | "flex-row-reverse"
@@ -8,7 +8,7 @@ interface FlexProps {
     | "flex-col-reverse";
 }
 
-export const Flex = tw.div<FlexProps>`
+export const FlexBox = tw.div<FlexBoxProps>`
   flex
   ${({ flex_direction = "flex-row" }) => flex_direction}
 `;
