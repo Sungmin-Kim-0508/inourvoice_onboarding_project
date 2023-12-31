@@ -19,4 +19,7 @@
   .message-li {
     margin-left: 15px;
   }
+  .message-nested-prev-li {
+    list-style-type: none;
+  }
 }

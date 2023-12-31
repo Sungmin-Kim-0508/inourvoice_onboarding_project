@@ -10,13 +10,13 @@ import {
   REMOVE_LIST_COMMAND,
 } from "@lexical/list";
 import { ListNodeTagType } from "@lexical/list/LexicalListNode";
-import { BoldIcon, ItalicIcon, ListIcon, UnderlineIcon } from "./icons";
+import { BoldIcon, ItalicIcon, ListIcon, UnderlineIcon } from "../icons";
 
 interface Props {
   isFocused: boolean;
 }
 
-export function Toolbars({ isFocused }: Props) {
+export function ToolbarPlugin({ isFocused }: Props) {
   const [editor] = useLexicalComposerContext();
   const [blockType, setBlockType] = useState<"paragraph" | ListNodeTagType>(
     "paragraph"
