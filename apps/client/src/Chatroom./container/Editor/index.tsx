@@ -83,7 +83,7 @@ export function Editor() {
             <button
               onClick={handleClickSend}
               disabled={message.length <= 11}
-              className="bg-green-700 text-white py-[2px] px-2 w-fit rounded-[4px] disabled:bg-transparent disabled:text-zinc-500"
+              className="bg-green-700 text-white py-[2px] px-2 w-fit rounded-[4px] disabled:bg-transparent disabled:text-zinc-500 hover:bg-green-600"
             >
               보내기
             </button>
