@@ -26,18 +26,12 @@ const reactionsInMessage = [
   },
 ];
 
-interface Props {
-  message: MessageType;
-}
-
-export function Message({ message }: Props) {
-  const {
-    content,
-    created_at,
-    user: { name, profile },
-    isHeadOfMessage,
-  } = message;
-
+export function Message({
+  content,
+  created_at,
+  user: { name, profile },
+  isHeadOfMessage,
+}: MessageType) {
   return (
     <div className="flex gap-[6px] px-[18px] py-[3px] hover:bg-zinc-700 relative group">
       <ProfileWrapper profile={isHeadOfMessage ? profile : undefined} />
@@ -51,15 +45,17 @@ export function Message({ message }: Props) {
         />
         <div className="flex gap-1 py-[3px]">
           {/* 임의로 View를 그리기 위해 배치해놓은 리액션 이모지 레이아웃입니다. (API 연동 시 변경 예정) */}
-          {reactionsInMessage.map((reaction, index) => (
-            <ReactionInMessage
-              key={index}
-              icon={reaction.icon}
-              count={reaction.count}
-              onClick={reaction.onClick}
-              isReactedByMe={reaction.isReactionByMe}
-            />
-          ))}
+          {reactionsInMessage.map(
+            ({ icon, count, onClick, isReactionByMe }, index) => (
+              <ReactionInMessage
+                key={index}
+                icon={icon}
+                count={count}
+                onClick={onClick}
+                isReactedByMe={isReactionByMe}
+              />
+            )
+          )}
         </div>
       </div>
       <ActionContainer />
