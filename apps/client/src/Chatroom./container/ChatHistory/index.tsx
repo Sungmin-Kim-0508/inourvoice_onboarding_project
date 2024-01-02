@@ -3,7 +3,7 @@ import { Message } from "./Message";
 import { ChatroomInfo } from "./ChatroomInfo";
 
 // TODO: [임시 데이터] API 연동 후 제거
-const message = [
+const messages = [
   {
     id: 0,
     created_at: "오후 12:47 (23.12.27)",
@@ -50,8 +50,8 @@ export function ChatHistory() {
     <section className="flex flex-col gap-6 py-4">
       <ChatroomInfo />
       <div>
-        {message.map((message) => (
-          <Message key={message.id} message={message} />
+        {messages.map((message) => (
+          <Message key={message.id} {...message} />
         ))}
       </div>
     </section>

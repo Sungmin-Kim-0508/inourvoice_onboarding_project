@@ -17,7 +17,7 @@ export function ReactionInMessage({
   return (
     <button
       onClick={onClick}
-      className={`cursor-pointer border rounded-[70px] flex w-fit items-center gap-[6px] px-[6px]  ${
+      className={`cursor-pointer border rounded-2xl flex w-fit items-center gap-[6px] px-[6px]  ${
         isReactedByMe
           ? "border-sky-700 bg-sky-700"
           : "bg-zinc-700 border-zinc-700 group-hover:border-zinc-600 group-hover:bg-zinc-600 hover:!border-zinc-500"

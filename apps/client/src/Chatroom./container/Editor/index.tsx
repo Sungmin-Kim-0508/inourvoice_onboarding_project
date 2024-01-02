@@ -11,6 +11,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
+import { Button } from "@repo/ui";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -80,13 +81,13 @@ export function Editor() {
             ErrorBoundary={LexicalErrorBoundary}
           />
           <div className="flex justify-end">
-            <button
+            <Button
               onClick={handleClickSend}
               disabled={message.length <= 11}
-              className="bg-green-700 text-white py-[2px] px-2 w-fit rounded-[4px] disabled:bg-transparent disabled:text-zinc-500 hover:bg-green-600"
+              className="border-none"
             >
               보내기
-            </button>
+            </Button>
           </div>
           <SericalizePlugin onChange={handleChange} />
           <HistoryPlugin />
