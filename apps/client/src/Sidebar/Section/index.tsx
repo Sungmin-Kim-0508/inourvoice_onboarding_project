@@ -14,7 +14,7 @@ export function Section({
   headingLabel,
   addingLabel,
 }: SectionProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <ChannelListWrapper>
       <ChannelListItem
