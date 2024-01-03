@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   InitialConfigType,
   LexicalComposer,
@@ -35,6 +35,8 @@ const initialConfig: InitialConfigType = {
 };
 
 export function Editor() {
+  const editorRef = useRef<HTMLDivElement>(null);
+
   // View 구현을 위해 임시적으로 메세지를 상태에 저장합니다. 추후 api 연동 시 변동 예정입니다.
   const [message, setMessage] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
@@ -48,17 +50,26 @@ export function Editor() {
     // TODO: 전송중일떄 로딩바 처리
   };
 
-  const handleFocus = (action: "focused" | "focusOut") => {
-    if (action === "focused") {
-      setIsFocused(true);
-      return;
-    }
-    setIsFocused(false);
-  };
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (editorRef.current && editorRef.current.contains(event.target)) {
+        setIsFocused(true);
+        return;
+      }
+
+      setIsFocused(false);
+    };
+
+    document.addEventListener("mousedown", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [editorRef]);
 
   return (
     <section className="px-5 pb-6">
       <div
+        ref={editorRef}
         className={`relative border p-2 rounded-lg flex flex-col gap-[3px] ${
           isFocused ? "border-zinc-400" : "border-zinc-600"
         }`}
@@ -67,11 +78,7 @@ export function Editor() {
           <ToolbarPlugin isFocused={isFocused} />
           <RichTextPlugin
             contentEditable={
-              <ContentEditable
-                onFocus={() => handleFocus("focused")}
-                onBlur={() => handleFocus("focusOut")}
-                className="text-zinc-300 outline-none px-[6px] py-[10px] z-10"
-              />
+              <ContentEditable className="text-zinc-300 outline-none px-[6px] py-[10px] z-10" />
             }
             placeholder={
               <div className="text-zinc-500 absolute top-[45px] left-[14px]">
@@ -84,7 +91,7 @@ export function Editor() {
             <Button
               onClick={handleClickSend}
               disabled={message.length <= 11}
-              className="border-none"
+              className="border-none px-2 py-[2px]"
             >
               보내기
             </Button>
