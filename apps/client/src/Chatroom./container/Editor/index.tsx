@@ -51,8 +51,12 @@ export function Editor() {
   };
 
   useEffect(() => {
-    const handleClick = (event) => {
-      if (editorRef.current && editorRef.current.contains(event.target)) {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        editorRef.current &&
+        event.target instanceof Node &&
+        editorRef.current.contains(event.target)
+      ) {
         setIsFocused(true);
         return;
       }
