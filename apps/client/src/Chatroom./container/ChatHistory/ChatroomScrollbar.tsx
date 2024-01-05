@@ -19,18 +19,23 @@ export function ChatroomScrollbar({ isLoading, sectionElement }: Props) {
     if (sectionElement && scrollbarElement && thumbElement) {
       const { clientHeight, scrollHeight, scrollTop } = sectionElement;
 
-      // 스크롤바의 top 위치를 현재 스크롤 위치에 맞춰 설정
-      scrollbarElement.style.top = `${scrollTop}px`;
+      if (scrollHeight > clientHeight) {
+        // 스크롤바의 top 위치를 현재 스크롤 위치에 맞춰 설정
+        scrollbarElement.style.top = `${scrollTop}px`;
 
-      // 스크롤 썸의 높이 계산 및 업데이트
-      const thumbHeight = clientHeight ** 2 / scrollHeight;
-      thumbElement.style.height = `${thumbHeight}px`;
+        // 스크롤 썸의 높이 계산 및 업데이트
+        const thumbHeight = clientHeight ** 2 / scrollHeight;
+        thumbElement.style.height = `${thumbHeight}px`;
 
-      // 스크롤 썸의 위치 계산 및 업데이트
-      const thumbPosition =
-        (scrollTop / (scrollHeight - clientHeight)) *
-        (clientHeight - thumbHeight);
-      thumbElement.style.transform = `translateY(${thumbPosition}px)`;
+        // 스크롤 썸의 위치 계산 및 업데이트
+        const thumbPosition =
+          (scrollTop / (scrollHeight - clientHeight)) *
+          (clientHeight - thumbHeight);
+        thumbElement.style.transform = `translateY(${thumbPosition}px)`;
+        scrollbarElement.style.display = "block";
+      } else {
+        scrollbarElement.style.display = "none";
+      }
     }
   };
 
