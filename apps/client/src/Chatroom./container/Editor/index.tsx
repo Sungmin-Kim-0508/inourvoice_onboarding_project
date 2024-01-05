@@ -75,7 +75,9 @@ export function Editor() {
       <div
         ref={editorRef}
         className={`relative border p-2 rounded-lg flex flex-col gap-[3px] ${
-          isFocused ? "border-zinc-400" : "border-zinc-600"
+          isFocused
+            ? "border-zinc-400 bg-[#2C2C30]"
+            : "border-zinc-600 bg-[#3F3F4633]"
         }`}
       >
         <LexicalComposer initialConfig={initialConfig}>
@@ -85,7 +87,7 @@ export function Editor() {
               <ContentEditable className="text-zinc-300 outline-none px-[6px] py-[10px] z-10" />
             }
             placeholder={
-              <div className="text-zinc-500 absolute top-[45px] left-[14px]">
+              <div className="text-zinc-500 absolute top-[51px] left-[14px]">
                 #공지에 메시지 보내기 (채팅방 이름에 따라 변경되게 추후 수정)
               </div>
             }
