@@ -31,16 +31,17 @@ export function ToolbarButton({
   const getButtonBgClassNames = () => {
     let classNames = "hover:bg-[#FFFFFF1A]";
 
-    if (isFocused) {
-      if (isActive) {
+    if (isActive) {
+      if (isFocused) {
         classNames += " bg-[#FFFFFF33]";
         return classNames;
       }
-      classNames += " bg-transparent";
+
+      classNames += " bg-[#FFFFFF1A]";
       return classNames;
     }
 
-    classNames += isActive ? " bg-[#FFFFFF1A]" : " bg-transparent";
+    classNames += " bg-transparent";
     return classNames;
   };
 
