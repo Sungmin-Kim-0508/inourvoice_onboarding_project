@@ -10,7 +10,8 @@ import {
   REMOVE_LIST_COMMAND,
 } from "@lexical/list";
 import { ListNodeTagType } from "@lexical/list/LexicalListNode";
-import { BoldIcon, ItalicIcon, ListIcon, UnderlineIcon } from "../icons";
+import { BoldIcon, ItalicIcon, ListIcon, UnderlineIcon } from "../../icons";
+import { ToolbarButton } from "./ToolbarButton";
 
 interface Props {
   isFocused: boolean;
@@ -21,6 +22,49 @@ export function ToolbarPlugin({ isFocused }: Props) {
   const [blockType, setBlockType] = useState<"paragraph" | ListNodeTagType>(
     "paragraph"
   );
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
+  const [isUnderline, setIsUnderline] = useState(false);
+
+  const handleDispatchTextFormat = (type: "bold" | "italic" | "underline") => {
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, type);
+  };
+
+  const handleDispatchListFormat = () => {
+    if (blockType !== "ul") {
+      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+    } else {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      setBlockType("paragraph");
+    }
+  };
+
+  const toolbars = [
+    {
+      Icon: BoldIcon,
+      isFocused,
+      isActive: isBold,
+      onClick: () => handleDispatchTextFormat("bold"),
+    },
+    {
+      Icon: ItalicIcon,
+      isFocused,
+      isActive: isItalic,
+      onClick: () => handleDispatchTextFormat("italic"),
+    },
+    {
+      Icon: UnderlineIcon,
+      isFocused,
+      isActive: isUnderline,
+      onClick: () => handleDispatchTextFormat("underline"),
+    },
+    {
+      Icon: ListIcon,
+      isFocused,
+      isActive: blockType === "ul",
+      onClick: handleDispatchListFormat,
+    },
+  ];
 
   /**
    * @description 드래그로 선택된 범위의 노드의 타입을 식별하여 blockType을 업데이트하는 함수입니다.
@@ -40,6 +84,10 @@ export function ToolbarPlugin({ isFocused }: Props) {
     const elementKey = element.getKey();
     const elementDOM = editor.getElementByKey(elementKey);
 
+    setIsBold(selection.hasFormat("bold"));
+    setIsItalic(selection.hasFormat("italic"));
+    setIsUnderline(selection.hasFormat("underline"));
+
     if (elementDOM === null) {
       return;
     }
@@ -49,19 +97,6 @@ export function ToolbarPlugin({ isFocused }: Props) {
       const type = parentList ? parentList.getTag() : element.getTag();
       setBlockType(type);
     } else {
-      setBlockType("paragraph");
-    }
-  };
-
-  const handleDispatchTextFormat = (type: "bold" | "italic" | "underline") => {
-    editor.dispatchCommand(FORMAT_TEXT_COMMAND, type);
-  };
-
-  const handleDispatchListFormat = () => {
-    if (blockType !== "ul") {
-      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
       setBlockType("paragraph");
     }
   };
@@ -76,23 +111,11 @@ export function ToolbarPlugin({ isFocused }: Props) {
     );
   }, []);
 
-  const fillColor = isFocused ? "#A1A1AA" : "#52525B";
-
   return (
-    <div className="flex gap-2">
-      <BoldIcon
-        onClick={() => handleDispatchTextFormat("bold")}
-        fill={fillColor}
-      />
-      <ItalicIcon
-        onClick={() => handleDispatchTextFormat("italic")}
-        fill={fillColor}
-      />
-      <UnderlineIcon
-        onClick={() => handleDispatchTextFormat("underline")}
-        fill={fillColor}
-      />
-      <ListIcon onClick={handleDispatchListFormat} fill={fillColor} />
+    <div className="flex gap-[3px]">
+      {toolbars.map((toolbar, index) => (
+        <ToolbarButton key={index} {...toolbar} />
+      ))}
       <ListPlugin />
     </div>
   );

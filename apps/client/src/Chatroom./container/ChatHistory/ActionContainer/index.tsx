@@ -15,7 +15,7 @@ export function ActionContainer() {
   ];
 
   return (
-    <div className="group-hover:flex hidden p-[2px] bg-zinc-800 rounded border border-[#A1A1AA80] w-fit absolute -top-[18px] right-[5px]">
+    <div className="group-hover:flex hidden p-[2px] bg-zinc-800 rounded border border-[#A1A1AA80] w-fit absolute -top-[18px] right-[20px]">
       {reactions.map(({ icon, onClick }, index) => (
         <ReactionButton key={index} icon={icon} onClick={onClick} />
       ))}
