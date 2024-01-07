@@ -1,13 +1,18 @@
 import React, { useState, useCallback, ChangeEvent } from "react";
 import { FlexBox, Text, Button, TextField } from "@repo/ui";
+import { useLogin } from "./modules/hooks/useLogin";
+import { LoginFormValues } from "./modules/types/LoginFormValues";
+import { Spinner } from "./icons";
 
 function Login() {
-  const [formValues, setFormValues] = useState({
-    email: "",
+  const [formValues, setFormValues] = useState<LoginFormValues>({
+    nickname: "",
     password: "",
   });
+  const { login, isLoading, error } = useLogin();
 
-  const isButtonDisabled = !formValues.email || !formValues.password;
+  const { nickname, password } = formValues;
+  const isButtonDisabled = !nickname || !password;
 
   const handleFormValues = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormValues((prevFormValues) => ({
@@ -16,8 +21,27 @@ function Login() {
     }));
   }, []);
 
-  const handleSubmit = () => {
-    // TODO: 로그인 로직 구현
+  const handleSubmit = async () => {
+    const authUser = await login(formValues);
+  };
+
+  const LoginButton = () => {
+    const defaultClassName = "absolute bottom-5 right-7";
+    const buttonLabel = isLoading ? (
+      <Spinner className="animate-spin" />
+    ) : (
+      "로그인"
+    );
+
+    return (
+      <Button
+        disabled={isButtonDisabled}
+        className={`${defaultClassName}`}
+        onClick={handleSubmit}
+      >
+        {buttonLabel}
+      </Button>
+    );
   };
 
   return (
@@ -30,11 +54,11 @@ function Login() {
           <FlexBox flex_direction="flex-col">
             <TextField
               label="아이디"
-              type="email"
-              name="email"
+              type="text"
+              name="nickname"
               placeholder="아이디를 입력해주세요"
               onChange={handleFormValues}
-              value={formValues.email}
+              value={formValues.nickname}
             />
             <TextField
               label="비밀번호"
@@ -42,17 +66,13 @@ function Login() {
               name="password"
               placeholder="비밀번호를 입력해주세요"
               value={formValues.password}
+              hasError={Boolean(error)}
+              helpMessage={error ? error : ""}
               onChange={handleFormValues}
             />
           </FlexBox>
         </FlexBox>
-        <Button
-          disabled={isButtonDisabled}
-          className="absolute bottom-5 right-7"
-          onClick={handleSubmit}
-        >
-          로그인
-        </Button>
+        <LoginButton />
       </div>
     </FlexBox>
   );
