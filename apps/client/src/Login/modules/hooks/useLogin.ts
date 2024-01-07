@@ -9,7 +9,7 @@ export const useLogin = () => {
   const login = async ({ nickname, password }: LoginFormValues) => {
     // const productionUrl = `https://inourvoice.com/user/?nickname=${nickname}&password=${password}`;
     /** 임시 URL */
-    const localHostUrl = `http://localhost:5173/user/?nickname=${nickname}&password=${password}`;
+    const localHostUrl = `http://localhost:8000/user/?nickname=${nickname}&password=${password}`;
 
     setError("");
     setIsLoading(true);

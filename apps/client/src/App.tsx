@@ -14,7 +14,13 @@ function App() {
 
   const fetchChannels = async () => {
     try {
-      const response = await fetch("https://inourvoice.com/channel");
+      const response = await fetch(
+        `${
+          import.meta.env.MODE === "production"
+            ? "https://inourvoice.com/channel"
+            : "http://localhost:8000/channel"
+        }`
+      );
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
