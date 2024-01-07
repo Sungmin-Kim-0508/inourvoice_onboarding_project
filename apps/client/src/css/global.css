@@ -8,6 +8,12 @@
   body {
     font-family: "Pretendard";
     background-color: #18181b; /* zinc-900 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   /* Message style overriding */
