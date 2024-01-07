@@ -11,7 +11,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
-import { Button } from "@repo/ui";
+import { LoaderIcon } from "./icons";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -40,14 +40,16 @@ export function Editor() {
   // View 구현을 위해 임시적으로 메세지를 상태에 저장합니다. 추후 api 연동 시 변동 예정입니다.
   const [message, setMessage] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
 
   const handleChange = (parsedHtml: string) => {
     setMessage(parsedHtml);
   };
 
   const handleClickSend = () => {
-    // TODO: 보내기 버튼 클릭 시 event 처리
     // TODO: 전송중일떄 로딩바 처리
+    // TODO: 소켓으로 서버에 메시지 전송 -> 전송된 메세지 UI에 업데이트
+    // TODO: 에디터 클리어
   };
 
   useEffect(() => {
@@ -94,13 +96,17 @@ export function Editor() {
             ErrorBoundary={LexicalErrorBoundary}
           />
           <div className="flex justify-end">
-            <Button
+            <button
               onClick={handleClickSend}
               disabled={message.length <= 11}
-              className="border-none px-2 py-[2px]"
+              className="flex justify-center items-center px-2 py-[2px] font-semibold bg-green-700 hover:bg-green-600 disabled:bg-transparent text-white rounded disabled:text-zinc-500 w-[58px] h-7"
             >
-              보내기
-            </Button>
+              {isLoading ? (
+                <LoaderIcon className="fill-white animate-spin" />
+              ) : (
+                "보내기"
+              )}
+            </button>
           </div>
           <SericalizePlugin onChange={handleChange} />
           <HistoryPlugin />
