@@ -9,6 +9,7 @@
     font-family: "Pretendard";
     background-color: #18181b; /* zinc-900 */
   }
+
   /* Message style overriding */
   .message-underline {
     text-decoration: underline;
@@ -21,5 +22,15 @@
   }
   .message-nested-prev-li {
     list-style-type: none;
+  }
+
+  /* ChatHistory 컴포넌트 기본 스크롤바 스타일링 */
+  .chat-history-section {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .chat-history-section::-webkit-scrollbar {
+    display: none;
   }
 }
