@@ -8,7 +8,7 @@ import Login from "./Login";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/:channelId",
     element: <App />,
   },
   {

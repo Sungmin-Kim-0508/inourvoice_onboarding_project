@@ -1,25 +1,43 @@
 import React from "react";
 import { HashtagIcon } from "@repo/ui/components/HashtagIcon";
 
-// TODO: [임시 데이터] API 연동 후 제거
-const channel = {
-  title: "공지",
-  created_at: "2023년 12월 23일",
-  created_by: "Raven",
-  description: "공지사항을 위한 방입니다! 사적인 대화는 삼가해주세요!",
-};
+interface Props {
+  title: string;
+  creator: string;
+  createdAt: string;
+  description: string | null;
+  hasMessages: boolean;
+}
 
-export function ChatroomInfo() {
-  // TODO: 데이터 연동 후 메세지 없는 경우 하단 border 스타일 제거
+export function ChatroomInfo({
+  title,
+  creator,
+  createdAt,
+  description,
+  hasMessages,
+}: Props) {
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}년 ${month}월 ${day}일`;
+  };
+
   return (
-    <div className="flex flex-col gap-2 py-6 px-5 border-b border-zinc-600">
+    <div
+      className={`flex flex-col gap-2 py-6 px-5 ${
+        hasMessages ? "border-b border-zinc-600" : ""
+      }`}
+    >
       <h2 className="flex text-zinc-300 text-3xl font-semibold items-center">
-        <HashtagIcon className="w-[30px] h-[30px] fill-zinc-300" /> 공지
+        <HashtagIcon className="w-[30px] h-[30px] fill-zinc-300" /> {title}
       </h2>
       <div className="text-lg text-zinc-300">
-        <p>{`채널 생성자: ${channel.created_by}`}</p>
-        <p>{`생성 날짜: ${channel.created_at}`}</p>
-        <p>{`설명: ${channel.description}`}</p>
+        <p>{`채널 생성자: ${creator}`}</p>
+        <p>{`생성 날짜: ${formatDate(createdAt)}`}</p>
+        {description && <p>{`설명: ${description}`}</p>}
       </div>
     </div>
   );

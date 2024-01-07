@@ -1,9 +1,9 @@
 import React from "react";
-import { MessageType } from "../../../modules/types/message";
 import { ActionContainer } from "../ActionContainer";
 import { ReactionInMessage } from "./ReactionInMessage";
 import { ProfileWrapper } from "./ProfileWrapper";
 import { NameWithDate } from "./NameWithDate";
+import { MessageAttributes } from "../../../modules/types/message";
 
 const reactionsInMessage = [
   {
@@ -29,9 +29,10 @@ const reactionsInMessage = [
 export function Message({
   content,
   created_at,
-  user: { name, profile },
-  isHeadOfMessage,
-}: MessageType) {
+  member: { name, profile },
+}: MessageAttributes) {
+  const isHeadOfMessage = true; // 소켓 연결 후 관련 로직 작성 예정
+
   return (
     <div className="flex gap-[6px] px-[18px] py-[3px] hover:bg-zinc-700 relative group">
       <ProfileWrapper profile={isHeadOfMessage ? profile : undefined} />

@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { Message } from "./Message";
 import { ChatroomInfo } from "./ChatroomInfo";
-import { useGetMessages } from "../../modules/hooks/useGetMessages";
 import { ChannelAttributes } from "../../../common/modules/types/Channel";
 import { ChatroomScrollbar } from "./ChatroomScrollbar";
 
@@ -9,27 +8,28 @@ export function ChatHistory({
   _id,
   title,
   description,
-  created_by,
-  createdAt,
-  connected_user,
+  creator,
+  created_at,
+  messages,
 }: ChannelAttributes) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { messages, error, isLoading } = useGetMessages({
-    channelId: _id,
-    connectedUser: connected_user,
-  });
+  const isLoading = false;
+  const hasMessages = messages.length > 0;
 
   return (
     <section
       ref={sectionRef}
-      className="chat-history-section relative flex flex-col gap-6 py-4 overflow-y-scroll"
+      className={`chat-history-section relative flex flex-col gap-6 overflow-y-scroll ${
+        hasMessages ? "py-4" : ""
+      }`}
     >
       <ChatroomInfo
         title={title}
         description={description}
-        createdAt={createdAt}
-        createdBy={created_by}
+        createdAt={created_at}
+        creator={creator.name}
+        hasMessages={hasMessages}
       />
       <div>
         {messages.map((message) => (
