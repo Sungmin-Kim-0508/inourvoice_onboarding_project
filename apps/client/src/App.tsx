@@ -15,7 +15,6 @@ function App() {
   const [channels, setChannels] = useState<Channel[]>([]);
 
   useEffect(() => {
-    //MEMO: 화면 나갈 때 socket disconnect
     const leavePage = () => {
       socket.disconnect();
       socketGroup.disconnect();
@@ -45,6 +44,7 @@ function App() {
           const data = await response.json();
          */
 
+        // TODO: socket으로 리팩토링
         const data = localStorage.getItem("user");
         if (!data) return;
 

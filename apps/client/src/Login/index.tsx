@@ -18,23 +18,25 @@ function Login() {
   const isButtonDisabled = !nickname || !password;
 
   useEffect(() => {
-    socket.on("connect_error", (error) => {
-      if (error.message) {
-        console.log("err");
-      }
-    });
+    const logger = (error: Error) =>
+      error.message && console.log(error.message);
+
+    socket.on("connect_error", logger);
+
+    socketGroup.on("connect_error", logger);
+
+    return () => {
+      socket.off("connect_error", logger);
+      socketGroup.off("connect_error", logger);
+    };
   }, []);
 
+  // TODO: socket을 이용하여 리팩토링
   useEffect(() => {
     const data = localStorage.getItem("user");
     if (!data) return;
 
     const user = JSON.parse(data);
-
-    socket.auth = { user };
-    socket.connect();
-    socketGroup.auth = { user };
-    socketGroup.connect();
 
     if (user?.channels) return navigate(`/${user?.channels[0]._id}`);
   }, []);
@@ -46,32 +48,26 @@ function Login() {
     }));
   }, []);
 
+  // TODO: socket을 이용하여 리팩토링
   const handleSubmit = async () => {
     try {
-      // TODO: Error message handler
       const authUser = await login(formValues);
 
       if (error || !authUser) return;
 
       if (!authUser._id) return;
 
-      // TODO: token 리팩토링
+      socket.connect();
+      socketGroup.connect();
       const user = localStorage.getItem("user");
       if (user) {
-        // TODO: DB값이 Update 됐을 때 스토리지 데이터 최신화
+        // MEMO: DB값이 Update 됐을 때 스토리지 데이터 최신화
         localStorage.setItem("user", JSON.stringify(authUser));
 
-        socket.auth = { user };
-        socket.connect();
-        socketGroup.auth = { user };
-        socketGroup.connect();
         return navigate(`/${authUser.channels[0]._id}`);
       }
 
-      console.log(":");
-      socket.auth = { user };
       socket.connect();
-      socketGroup.auth = { user };
       socketGroup.connect();
       localStorage.setItem("user", JSON.stringify(authUser));
       return navigate(`/${authUser.channels[0]._id}`);

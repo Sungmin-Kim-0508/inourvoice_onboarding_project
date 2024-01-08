@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { User } from "../types/User";
 import { LoginFormValues } from "../types/LoginFormValues";
+import { socket, socketGroup } from "../../../socket";
 
 export const useLogin = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const login = async ({ nickname, password }: LoginFormValues) => {
+    // TODO: Socket으로 리팩토링
+    socket.auth = { nickname, password };
+    socketGroup.auth = { nickname, password };
+
     // const productionUrl = `https://inourvoice.com/user/?nickname=${nickname}&password=${password}`;
     /** 임시 URL */
     const localHostUrl = `http://localhost:8000/user/?nickname=${nickname}&password=${password}`;
