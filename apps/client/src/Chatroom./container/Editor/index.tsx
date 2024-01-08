@@ -12,6 +12,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 import { LoaderIcon } from "./icons";
+import { socketGroup } from "../../../socket";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -40,7 +41,7 @@ export function Editor() {
   // View 구현을 위해 임시적으로 메세지를 상태에 저장합니다. 추후 api 연동 시 변동 예정입니다.
   const [message, setMessage] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
+  const [isLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
 
   const handleChange = (parsedHtml: string) => {
     setMessage(parsedHtml);
@@ -50,6 +51,9 @@ export function Editor() {
     // TODO: 전송중일떄 로딩바 처리
     // TODO: 소켓으로 서버에 메시지 전송 -> 전송된 메세지 UI에 업데이트
     // TODO: 에디터 클리어
+
+    // TODO: 메세지 전송 socket으로 구현
+    socketGroup.emit("sendMessage", { message: "반갑습니다" });
   };
 
   useEffect(() => {

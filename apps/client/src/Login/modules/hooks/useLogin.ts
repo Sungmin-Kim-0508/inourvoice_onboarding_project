@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { User } from "../types/User";
 import { LoginFormValues } from "../types/LoginFormValues";
+import { socket, socketGroup } from "../../../socket";
 
 export const useLogin = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const login = async ({ nickname, password }: LoginFormValues) => {
+    // TODO: Socket으로 리팩토링
+    socket.auth = { nickname, password };
+    socketGroup.auth = { nickname, password };
+
     // const productionUrl = `https://inourvoice.com/user/?nickname=${nickname}&password=${password}`;
     /** 임시 URL */
-    const localHostUrl = `http://localhost:5173/user/?nickname=${nickname}&password=${password}`;
+    const localHostUrl = `http://localhost:8000/user/?nickname=${nickname}&password=${password}`;
 
     setError("");
     setIsLoading(true);
@@ -21,17 +26,17 @@ export const useLogin = () => {
       return;
     }
 
-    const users = (await response.json()) as Array<User>;
-    const authUser = users.find((user) => user.nickname === nickname);
-    if (authUser === undefined || Object.keys(authUser).length === 0) {
+    const user = (await response.json()) as User;
+    // const authUser = users.find((user) => user.nickname === nickname);
+
+    if (user === undefined || Object.keys(user).length === 0) {
       setError("잘못 입력했어요. 비밀번호와 아이디를 확인해 주세요.");
       setIsLoading(false);
       return;
     }
-
     setIsLoading(false);
 
-    return authUser;
+    return user;
   };
 
   return { login, isLoading, error };

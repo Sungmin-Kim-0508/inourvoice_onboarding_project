@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <script
+      src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+      integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const socket = io('http://localhost:8000');
+      const room = io('http://localhost:8000/channel');
+
+      socket.on('connect', async () => {
+        // 이전 채팅 목록 모두 패칭
+        const prevMessages = await fetch(
+          'http://localhost:8000/channel/?title=공지사항',
+        );
+
+        // 이전 메세지 View 렌더링
+        // console.log(await prevMessages.json());
+      });
+
+      room.on('connect', async (socketInfo) => {
+        console.log('connection', await socketInfo);
+
+        room.on('sendChannelData', async (data) => {
+          console.log('채널 메세지 데이터 ------------->');
+          console.log('sendChannelData', data);
+        });
+        // socket.emit('events', { message: 'hi', socketId: 1 });
+
+        // room.on('message', (res) => {
+        //   // 메세지를 전송하면 모두에게 뿌린다.
+        // });
+
+        room.emit(
+          'sendMessage',
+          {
+            socketId: room.id,
+            content: '안녕하세요~~',
+            member: '6593b1de8f2a6a8065bea50a',
+            channel: '659251676fab03d6381244f0',
+          },
+          (response) => {
+            console.log(room.id);
+            console.log('message:', response);
+          },
+        );
+
+        room.emit(
+          'sendMessage',
+          {
+            socketId: room.id,
+            content: '안녕하세요~~',
+            member: '6593b1de8f2a6a8065bea50a',
+            channel: '659251676fab03d6381244f0',
+          },
+          (response) => {
+            console.log(room.id);
+            console.log('message:', response);
+          },
+        );
+
+        room.on('sendMessage', async ({ member, message }) => {
+          if (!member || !message) return;
+          console.log(member, message);
+          const htmlString = String.raw`<div id="aMessage">
+            <di>${member}</div>
+            <di>${message}</div>
+            </div>`;
+
+          document.getElementById('message').innerHTML += htmlString;
+        });
+      });
+
+      socket.on('exception', function (data) {
+        console.log('event', data);
+      });
+      socket.on('disconnect', function () {
+        console.log('Disconnected');
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="message"></div>
+  </body>
+</html>

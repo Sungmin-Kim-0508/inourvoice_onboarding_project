@@ -3,7 +3,8 @@ import { ActionContainer } from "../ActionContainer";
 import { ReactionInMessage } from "./ReactionInMessage";
 import { ProfileWrapper } from "./ProfileWrapper";
 import { NameWithDate } from "./NameWithDate";
-import { MessageAttributes } from "../../../modules/types/message";
+
+import { Message as MessageType } from "../../../../Login/modules/types/Message";
 
 const reactionsInMessage = [
   {
@@ -26,11 +27,12 @@ const reactionsInMessage = [
   },
 ];
 
+//ERROR: name, profile 에러
 export function Message({
   content,
   created_at,
   member: { name, profile },
-}: MessageAttributes) {
+}: MessageType) {
   const isHeadOfMessage = true; // 소켓 연결 후 관련 로직 작성 예정
 
   return (
