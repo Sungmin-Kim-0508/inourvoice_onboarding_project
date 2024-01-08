@@ -1,10 +1,12 @@
-import React, { useState, useCallback, ChangeEvent } from "react";
+import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
 import { FlexBox, Text, Button, TextField } from "@repo/ui";
 import { useLogin } from "./modules/hooks/useLogin";
 import { LoginFormValues } from "./modules/types/LoginFormValues";
 import { Spinner } from "./icons";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState<LoginFormValues>({
     nickname: "",
     password: "",
@@ -13,6 +15,15 @@ function Login() {
 
   const { nickname, password } = formValues;
   const isButtonDisabled = !nickname || !password;
+
+  useEffect(() => {
+    const data = localStorage.getItem("user");
+    if (!data) return;
+
+    const { channels } = JSON.parse(data);
+
+    if (channels) return navigate(`/${channels[0]._id}`);
+  }, []);
 
   const handleFormValues = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormValues((prevFormValues) => ({
@@ -24,9 +35,22 @@ function Login() {
   const handleSubmit = async () => {
     try {
       // TODO: Error message handler
-      const { nickname, password } = await login(formValues);
-      if (error || authUser) return;
+      const authUser = await login(formValues);
+
+      if (error || !authUser) return;
+
+      if (!authUser._id) return;
+
+      const user = localStorage.getItem("user");
+      if (user) {
+        // TODO: Update 검증
+        localStorage.setItem("user", JSON.stringify(authUser));
+        return navigate(`/${authUser.channels[0]._id}`);
+      }
+
       // TODO: token 리팩토링
+      localStorage.setItem("user", JSON.stringify(authUser));
+      return navigate(`/${authUser.channels[0]._id}`);
     } catch (error) {
       console.error(error);
     }

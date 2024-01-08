@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 import { ChannelListItem } from "./ChannelListItem";
 import { Plus } from "../icons";
+import { Channel } from "../../Login/modules/types/Channel";
 
 interface SectionProps {
-  list: { items: { name: string }[]; icon: React.ReactNode };
+  list: { items: Channel[]; icon: React.ReactNode };
   headingLabel: string;
   addingLabel: React.ReactNode;
 }
@@ -15,6 +16,7 @@ export function Section({
   addingLabel,
 }: SectionProps) {
   const [open, setOpen] = useState(true);
+
   return (
     <ChannelListWrapper>
       <ChannelListItem
@@ -25,9 +27,9 @@ export function Section({
       </ChannelListItem>
       {open ? (
         <>
-          {items.map(({ name }, index) => (
-            <ChannelListItem key={`${name}_${index}`} icon={icon}>
-              {name}
+          {items?.map(({ title = "" }, index) => (
+            <ChannelListItem key={`${title}_${index}`} icon={icon}>
+              {title}
             </ChannelListItem>
           ))}
           <ChannelListItem icon={<Plus />} textColor="text-zinc-500">

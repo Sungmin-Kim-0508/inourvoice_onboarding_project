@@ -23,12 +23,12 @@ export const useLogin = () => {
 
     const user = (await response.json()) as User;
     // const authUser = users.find((user) => user.nickname === nickname);
+
     if (user === undefined || Object.keys(user).length === 0) {
       setError("잘못 입력했어요. 비밀번호와 아이디를 확인해 주세요.");
       setIsLoading(false);
       return;
     }
-
     setIsLoading(false);
 
     return user;
