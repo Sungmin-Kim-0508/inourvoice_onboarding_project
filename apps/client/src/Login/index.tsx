@@ -22,7 +22,15 @@ function Login() {
   }, []);
 
   const handleSubmit = async () => {
-    const authUser = await login(formValues);
+    try {
+      // TODO: Error message handler
+      const authUser = await login(formValues);
+      if (error || authUser) return;
+      // TODO: Session token 리팩토링
+      // MEMO: 로그인 된 유저에게 token 전송
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const LoginButton = () => {
