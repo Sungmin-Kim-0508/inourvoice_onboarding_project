@@ -21,9 +21,9 @@ export const useLogin = () => {
       return;
     }
 
-    const users = (await response.json()) as Array<User>;
-    const authUser = users.find((user) => user.nickname === nickname);
-    if (authUser === undefined || Object.keys(authUser).length === 0) {
+    const user = (await response.json()) as User;
+    // const authUser = users.find((user) => user.nickname === nickname);
+    if (user === undefined || Object.keys(user).length === 0) {
       setError("잘못 입력했어요. 비밀번호와 아이디를 확인해 주세요.");
       setIsLoading(false);
       return;
@@ -31,7 +31,7 @@ export const useLogin = () => {
 
     setIsLoading(false);
 
-    return authUser;
+    return user;
   };
 
   return { login, isLoading, error };

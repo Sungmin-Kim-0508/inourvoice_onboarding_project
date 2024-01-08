@@ -24,10 +24,9 @@ function Login() {
   const handleSubmit = async () => {
     try {
       // TODO: Error message handler
-      const authUser = await login(formValues);
+      const { nickname, password } = await login(formValues);
       if (error || authUser) return;
-      // TODO: Session token 리팩토링
-      // MEMO: 로그인 된 유저에게 token 전송
+      // TODO: token 리팩토링
     } catch (error) {
       console.error(error);
     }
