@@ -12,6 +12,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 import { LoaderIcon } from "./icons";
+import { socketGroup } from "../../../socket";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -50,6 +51,8 @@ export function Editor() {
     // TODO: 전송중일떄 로딩바 처리
     // TODO: 소켓으로 서버에 메시지 전송 -> 전송된 메세지 UI에 업데이트
     // TODO: 에디터 클리어
+
+    socketGroup.emit("sendMessage", { message: "반갑습니다" });
   };
 
   useEffect(() => {

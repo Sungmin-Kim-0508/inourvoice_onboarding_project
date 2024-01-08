@@ -3,15 +3,29 @@ import { ChatRoom } from "./Chatroom./container";
 import { useParams } from "react-router-dom";
 
 import { Sidebar } from "./Sidebar";
-import { io } from "socket.io-client";
+
 import { HashtagIcon } from "@repo/ui/components/HashtagIcon";
 import { Channel } from "./Login/modules/types/Channel";
+import { socket, socketGroup } from "./socket";
 
 function App() {
   const { channelId } = useParams();
 
   // * 소켓 연동 전에 임의로 msw에서 데이터를 가져왔습니다. 소켓 통신 후 제거 예정입니다.
   const [channels, setChannels] = useState<Channel[]>([]);
+
+  useEffect(() => {
+    //MEMO: 화면 나갈 때 socket disconnect
+    const leavePage = () => {
+      socket.disconnect();
+      socketGroup.disconnect();
+    };
+
+    window.addEventListener("unload", leavePage);
+    return () => {
+      window.removeEventListener("unload", leavePage);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchChannels = async () => {
@@ -30,6 +44,7 @@ function App() {
   
           const data = await response.json();
          */
+
         const data = localStorage.getItem("user");
         if (!data) return;
 

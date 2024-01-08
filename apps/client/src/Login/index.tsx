@@ -4,6 +4,7 @@ import { useLogin } from "./modules/hooks/useLogin";
 import { LoginFormValues } from "./modules/types/LoginFormValues";
 import { Spinner } from "./icons";
 import { useNavigate } from "react-router-dom";
+import { socket, socketGroup } from "../socket";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,12 +18,25 @@ function Login() {
   const isButtonDisabled = !nickname || !password;
 
   useEffect(() => {
+    socket.on("connect_error", (error) => {
+      if (error.message) {
+        console.log("err");
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     const data = localStorage.getItem("user");
     if (!data) return;
 
-    const { channels } = JSON.parse(data);
+    const user = JSON.parse(data);
 
-    if (channels) return navigate(`/${channels[0]._id}`);
+    socket.auth = { user };
+    socket.connect();
+    socketGroup.auth = { user };
+    socketGroup.connect();
+
+    if (user?.channels) return navigate(`/${user?.channels[0]._id}`);
   }, []);
 
   const handleFormValues = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -41,14 +55,24 @@ function Login() {
 
       if (!authUser._id) return;
 
+      // TODO: token 리팩토링
       const user = localStorage.getItem("user");
       if (user) {
-        // TODO: Update 검증
+        // TODO: DB값이 Update 됐을 때 스토리지 데이터 최신화
         localStorage.setItem("user", JSON.stringify(authUser));
+
+        socket.auth = { user };
+        socket.connect();
+        socketGroup.auth = { user };
+        socketGroup.connect();
         return navigate(`/${authUser.channels[0]._id}`);
       }
 
-      // TODO: token 리팩토링
+      console.log(":");
+      socket.auth = { user };
+      socket.connect();
+      socketGroup.auth = { user };
+      socketGroup.connect();
       localStorage.setItem("user", JSON.stringify(authUser));
       return navigate(`/${authUser.channels[0]._id}`);
     } catch (error) {
