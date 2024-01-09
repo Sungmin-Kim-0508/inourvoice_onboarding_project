@@ -12,6 +12,7 @@ import { ListItemNode, ListNode } from "@lexical/list";
 import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 import { LoaderIcon } from "./icons";
+import { CheckEmptyStatusPlugin } from "./plugins/CheckEmptyStatusPlugin";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -40,10 +41,15 @@ export function Editor() {
   // View 구현을 위해 임시적으로 메세지를 상태에 저장합니다. 추후 api 연동 시 변동 예정입니다.
   const [message, setMessage] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
 
-  const handleChange = (parsedHtml: string) => {
+  const handleUpdateMessage = (parsedHtml: string) => {
     setMessage(parsedHtml);
+  };
+
+  const handleUpdateEmptyStatus = (status: boolean) => {
+    setIsEmpty(status);
   };
 
   const handleClickSend = () => {
@@ -98,7 +104,7 @@ export function Editor() {
           <div className="flex justify-end">
             <button
               onClick={handleClickSend}
-              disabled={message.length <= 11}
+              disabled={isEmpty}
               className="flex justify-center items-center px-2 py-[2px] font-semibold bg-green-700 hover:bg-green-600 disabled:bg-transparent text-white rounded disabled:text-zinc-500 w-[58px] h-7"
             >
               {isLoading ? (
@@ -108,7 +114,10 @@ export function Editor() {
               )}
             </button>
           </div>
-          <SericalizePlugin onChange={handleChange} />
+          <SericalizePlugin onUpdateMessage={handleUpdateMessage} />
+          <CheckEmptyStatusPlugin
+            onUpdateEmptyStatus={handleUpdateEmptyStatus}
+          />
           <HistoryPlugin />
           <TabIndentationPlugin />
         </LexicalComposer>
