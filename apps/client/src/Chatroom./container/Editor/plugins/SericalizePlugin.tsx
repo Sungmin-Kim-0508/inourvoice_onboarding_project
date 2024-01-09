@@ -6,9 +6,9 @@ import { useEffect } from "react";
  * @description 에디터의 업데이트를 감지하고 텍스트를 html 포맷으로 변경하는 함수입니다.
  */
 export function SericalizePlugin({
-  onChange,
+  onUpdateMessage,
 }: {
-  onChange: (parsedHtml: string) => void;
+  onUpdateMessage: (parsedHtml: string) => void;
 }) {
   const [editor] = useLexicalComposerContext();
 
@@ -16,10 +16,10 @@ export function SericalizePlugin({
     return editor.registerUpdateListener(() => {
       editor.update(() => {
         const html = $generateHtmlFromNodes(editor, null);
-        onChange(html);
+        onUpdateMessage(html);
       });
     });
-  }, [editor, onChange]);
+  }, [editor]);
 
   return null;
 }

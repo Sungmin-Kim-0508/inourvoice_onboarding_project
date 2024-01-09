@@ -3,8 +3,7 @@ import { ChatRoom } from "./Chatroom./container";
 import { useParams } from "react-router-dom";
 
 import { Sidebar } from "./Sidebar";
-
-import { HashtagIcon } from "@repo/ui/components/HashtagIcon";
+import { ChatRoomHeader } from "./Chatroom./container/Header";
 import { Channel } from "./Login/modules/types/Channel";
 import { socket, socketGroup } from "./socket";
 
@@ -67,12 +66,7 @@ function App() {
       </aside>
       {currentChannel && (
         <div className="bg-zinc-800 flex flex-col w-full border-l border-zinc-600">
-          <header className="h-[48px] px-3 py-[10px] text-zinc-300 border-b border-zinc-600">
-            <h2 className="text-lg font-bold flex items-center leading-[21.6px] text-zinc-300">
-              <HashtagIcon className="w-[20px] h-[20px] fill-zinc-300" />
-              {currentChannel.title}
-            </h2>
-          </header>
+          <ChatRoomHeader title={currentChannel.title} />
           <ChatRoom channel={currentChannel} />
         </div>
       )}
