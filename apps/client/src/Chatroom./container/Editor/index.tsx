@@ -13,6 +13,7 @@ import { SericalizePlugin } from "./plugins/SericalizePlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 import { LoaderIcon } from "./icons";
 import { CheckEmptyStatusPlugin } from "./plugins/CheckEmptyStatusPlugin";
+import { socketGroup } from "../../../socket";
 
 const initialConfig: InitialConfigType = {
   namespace: "MessageEditor",
@@ -42,7 +43,7 @@ export function Editor() {
   const [message, setMessage] = useState<string>("");
   const [isFocused, setIsFocused] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
+  const [isLoading] = useState(false); // 메세지 전송 시 보이는 Loader 확인을 위한 임시 상태
 
   const handleUpdateMessage = (parsedHtml: string) => {
     setMessage(parsedHtml);
@@ -56,6 +57,9 @@ export function Editor() {
     // TODO: 전송중일떄 로딩바 처리
     // TODO: 소켓으로 서버에 메시지 전송 -> 전송된 메세지 UI에 업데이트
     // TODO: 에디터 클리어
+
+    // TODO: 메세지 전송 socket으로 구현
+    socketGroup.emit("sendMessage", { message: "반갑습니다" });
   };
 
   useEffect(() => {

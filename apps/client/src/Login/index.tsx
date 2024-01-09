@@ -1,10 +1,13 @@
-import React, { useState, useCallback, ChangeEvent } from "react";
+import React, { useState, useCallback, ChangeEvent, useEffect } from "react";
 import { FlexBox, Text, Button, TextField } from "@repo/ui";
 import { useLogin } from "./modules/hooks/useLogin";
 import { LoginFormValues } from "./modules/types/LoginFormValues";
 import { Spinner } from "./icons";
+import { useNavigate } from "react-router-dom";
+import { socket, socketGroup } from "../socket";
 
 function Login() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState<LoginFormValues>({
     nickname: "",
     password: "",
@@ -14,6 +17,30 @@ function Login() {
   const { nickname, password } = formValues;
   const isButtonDisabled = !nickname || !password;
 
+  useEffect(() => {
+    const logger = (error: Error) =>
+      error.message && console.log(error.message);
+
+    socket.on("connect_error", logger);
+
+    socketGroup.on("connect_error", logger);
+
+    return () => {
+      socket.off("connect_error", logger);
+      socketGroup.off("connect_error", logger);
+    };
+  }, []);
+
+  // TODO: socket을 이용하여 리팩토링
+  useEffect(() => {
+    const data = localStorage.getItem("user");
+    if (!data) return;
+
+    const user = JSON.parse(data);
+
+    if (user?.channels) return navigate(`/${user?.channels[0]._id}`);
+  }, []);
+
   const handleFormValues = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFormValues((prevFormValues) => ({
       ...prevFormValues,
@@ -21,8 +48,32 @@ function Login() {
     }));
   }, []);
 
+  // TODO: socket을 이용하여 리팩토링
   const handleSubmit = async () => {
-    const authUser = await login(formValues);
+    try {
+      const authUser = await login(formValues);
+
+      if (error || !authUser) return;
+
+      if (!authUser._id) return;
+
+      socket.connect();
+      socketGroup.connect();
+      const user = localStorage.getItem("user");
+      if (user) {
+        // MEMO: DB값이 Update 됐을 때 스토리지 데이터 최신화
+        localStorage.setItem("user", JSON.stringify(authUser));
+
+        return navigate(`/${authUser.channels[0]._id}`);
+      }
+
+      socket.connect();
+      socketGroup.connect();
+      localStorage.setItem("user", JSON.stringify(authUser));
+      return navigate(`/${authUser.channels[0]._id}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const LoginButton = () => {

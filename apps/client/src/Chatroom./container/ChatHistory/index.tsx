@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Message } from "./Message";
 import { ChatroomInfo } from "./ChatroomInfo";
-import { ChannelAttributes } from "../../../common/modules/types/Channel";
+
 import { ChatroomScrollbar } from "./ChatroomScrollbar";
+import { Channel } from "../../../Login/modules/types/Channel";
 
 export function ChatHistory({
-  _id,
   title,
   description,
   creator,
   created_at,
   messages,
-}: ChannelAttributes) {
+}: Channel) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -39,13 +39,11 @@ export function ChatHistory({
         title={title}
         description={description}
         createdAt={created_at}
-        creator={creator.name}
+        creator={creator.nickname}
         hasMessages={hasMessages}
       />
       <div>
-        {messages.map((message) => (
-          <Message key={message._id} {...message} />
-        ))}
+        {messages?.map((message) => <Message key={message._id} {...message} />)}
       </div>
       <ChatroomScrollbar
         isLoading={isLoading}
